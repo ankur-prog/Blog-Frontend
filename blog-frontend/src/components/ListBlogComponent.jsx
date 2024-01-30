@@ -88,7 +88,7 @@ const ListBlogComponent = () => {
       </button>
       <div className="card shadow-sm">
         <div className="card-body">
-          <table className="table table-hover">
+          <table className="table table-hover table-striped">
             <thead className="bg-primary text-white">
               <tr>
                 <th scope="col" className="text-center">

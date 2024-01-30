@@ -58,61 +58,62 @@ const CreateBlogComponent = () => {
       .catch(() => false);
   }
 
-  async function saveOrUpdateBlog(e) {
-    e.preventDefault();
-    const isValid = validate();
-    if (isValid) {
-      const author = {
-        id: authorId,
-        name: authorName,
-        email: authorEmail,
-      };
-      const blog = {
-        title: title,
-        content: content,
-        author: author,
-      };
-      console.log(blog);
-      const isConnected = await checkInternetConnection(); // Check internet connectivity
-      //console.log(isConnected)
-      setStatusColor(isConnected ? "green" : "red");
 
-      if (id) {
-        const updateBlogService =
-          statusColor === "red" ? offlineUpdateBlog : updateBlog;
-        // make a put request to the server
-        updateBlogService(id, title, content)
-          .then((response) => {
-            console.log(response.data);
-            console.log(response.status);
-            navigate("/blogs");
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      } else {
-        // make a post request to the server
-        const createBlogService =
-          statusColor === "red" ? offlineCreateBlog : createBlog;
-        createBlogService(blog)
-          .then((response) => {
-            console.log(response.data);
-            console.log(response.status);
-            navigate("/blogs");
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      }
-    }
-  }
+   async function saveOrUpdateBlog(e) {
+     e.preventDefault();
+     const isValid = validate();
+     if (isValid) {
+       const author = {
+         id: authorId,
+         name: authorName,
+         email: authorEmail,
+       };
+       const blog = {
+         title: title,
+         content: content,
+         author: author,
+       };
+       console.log(blog);
+       const isConnected = await checkInternetConnection(); // Check internet connectivity
+       setStatusColor(isConnected ? "green" : "red");
+
+       if (id) {
+         const updateBlogService = isConnected ? updateBlog : offlineUpdateBlog;
+         // make a put request to the server
+         updateBlogService(id, title, content)
+           .then((response) => {
+             console.log(response.data);
+             console.log(response.status);
+             navigate("/blogs");
+           })
+           .catch((e) => {
+             console.log(e);
+           });
+       } else {
+         // make a post request to the server
+         const createBlogService = isConnected ? createBlog : offlineCreateBlog;
+         createBlogService(blog)
+           .then((response) => {
+             console.log(response.data);
+             console.log(response.status);
+             navigate("/blogs");
+           })
+           .catch((e) => {
+             console.log(e);
+           });
+       }
+     }
+   }
   // useParams is a hook that returns an object of key/value pairs of URL parameters. Use it to access match.params of the current <Route>.
   const { id } = useParams();
 
   // useEffect takes a function, that contains imperative, possibly effectful code. in below code, we are calling blogs() function from blogService.js file.
-  useEffect(() => {
+useEffect(() => {
+  const fetchBlog = async () => {
     if (id) {
-      const getBlogService = statusColor === "green" ? getBlog : offlineGetBlog;
+      const isConnected = await checkInternetConnection(); // Check internet connectivity
+      setStatusColor(isConnected ? "green" : "red");
+      const getBlogService = isConnected ? getBlog : offlineGetBlog;
 
       getBlogService(id)
         .then((response) => {
@@ -126,7 +127,10 @@ const CreateBlogComponent = () => {
           console.error(err);
         });
     }
-  }, [id]);
+  };
+
+  fetchBlog();
+}, [id]);
 
   console.log(id);
 

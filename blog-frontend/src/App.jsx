@@ -15,7 +15,7 @@ function App() {
   return (
     <>
  
-    {/* p is a component that wraps all the routes in your application and  provides them with all the functionality related to routing.
+    {/* BrowserRouter is a component that wraps all the routes in your application and  provides them with all the functionality related to routing.
     The BrowserRouter component should always be imported from the react-router-dom package.*/}
     <BrowserRouter>
     <HeaderComponent />
