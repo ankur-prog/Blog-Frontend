@@ -45,7 +45,7 @@ const ListBlogComponent = () => {
     //console.log(isConnected)
     setStatusColor(isConnected ? "green" : "red");
     //console.log(statusColor)
-    const blogService = statusColor === "red" ? offlineBlogs : blogs;
+   const blogService = isConnected ? blogs : offlineBlogs;
 
     blogService()
       .then((response) => {
@@ -70,8 +70,7 @@ const ListBlogComponent = () => {
     const isConnected = await checkInternetConnection();
     setStatusColor(isConnected ? "green" : "red");
     //console.log(statusColor)
-    const removeBlogService =
-      statusColor === "red" ? offlineRemoveBlog : removeBlog;
+    const removeBlogService = isConnected ? removeBlog : offlineRemoveBlog;
     removeBlogService(id).then((response) => {
       console.log(response.data);
       console.log(response.status);
